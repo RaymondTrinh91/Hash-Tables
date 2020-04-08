@@ -96,6 +96,9 @@ class HashTable:
         index = self._hash_mod(key)
 
         if self.storage[index] is not None and self.storage[index].key == key:
+            self.count -= 1
+            # if self.count / self.capacity <= .2:
+            #     self.resize()            
             self.storage[index] = None
 
         elif self.storage[index] is not None:
@@ -107,6 +110,9 @@ class HashTable:
                 current = current.next
 
             if current.key == key:
+                self.count -= 1
+                # if self.count / self.capacity <= .2:
+                #     self.resize()                 
                 prev_node.next = current.next
                 current = None
             else:
@@ -145,7 +151,10 @@ class HashTable:
 
         Fill this in.
         '''
-        self.capacity *= 2
+        if self.count != 0 and self.count / self.capacity <= .2:
+            self.capacity /= 2
+        else:
+            self.capacity *= 2
 
         temp_hash_table = [None] * self.capacity
         clone = self.storage
@@ -158,7 +167,6 @@ class HashTable:
                     self.insert(current.key, current.value)
                     current = current.next
 
-        self.storage = temp_hash_table
 
 
 
